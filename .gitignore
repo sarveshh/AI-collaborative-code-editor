@@ -1,41 +1,170 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# ================================================================
+# Real-Time Collaborative Rich Text Editor - .gitignore
+# ================================================================
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
-
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
+# ----------------------------------------
+# Node.js Dependencies
+# ----------------------------------------
+node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
+pnpm-debug.log*
+.npm
+.yarn-integrity
 
-# env files (can opt-in for committing if needed)
-.env*
+# ----------------------------------------
+# Environment Variables & Secrets
+# ----------------------------------------
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+*.key
+*.crt
+openai-api-key.txt
+api-keys.txt
 
-# vercel
-.vercel
+# ----------------------------------------
+# Next.js Client (editor-app)
+# ----------------------------------------
+editor-app/.next/
+editor-app/out/
+editor-app/.swc/
+editor-app/.turbo/
+editor-app/build/
 
-# typescript
+# ----------------------------------------
+# Node.js Server (realtime-server)
+# ----------------------------------------
+realtime-server/build/
+realtime-server/dist/
+realtime-server/logs/
+realtime-server/uploads/
+
+# ----------------------------------------
+# Database Files
+# ----------------------------------------
+*.db
+*.sqlite
+*.sqlite3
+data/
+dump/
+dev.db
+test.db
+
+# ----------------------------------------
+# Development & Build Tools
+# ----------------------------------------
+.next/
+out/
+build/
+dist/
+.cache/
+.parcel-cache/
 *.tsbuildinfo
-next-env.d.ts
+.eslintcache
+.stylelintcache
+.prettiercache
+
+# ----------------------------------------
+# Testing & Coverage
+# ----------------------------------------
+coverage/
+.nyc_output/
+test-results/
+playwright-report/
+playwright/.cache/
+cypress/videos/
+cypress/screenshots/
+
+# ----------------------------------------
+# IDE & Editor Files
+# ----------------------------------------
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.iml
+*.sublime-project
+*.sublime-workspace
+
+# ----------------------------------------
+# Operating System Files
+# ----------------------------------------
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+*.lnk
+*~
+
+# ----------------------------------------
+# Temporary & Log Files
+# ----------------------------------------
+logs/
+*.log
+*.tmp
+*.temp
+.temp/
+.tmp/
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# ----------------------------------------
+# Deployment & Services
+# ----------------------------------------
+.vercel/
+.netlify/
+.serverless/
+ecosystem.config.js
+
+# ----------------------------------------
+# Backup & Archive Files
+# ----------------------------------------
+*.bak
+*.backup
+*.old
+*.orig
+*.rej
+*.tgz
+*.tar.gz
+*.zip
+
+# ----------------------------------------
+# Runtime & Cache
+# ----------------------------------------
+.turbo/
+.swc/
+.cache/
+sessions/
+socket.io.log
+
+# ----------------------------------------
+# AI/LLM Related
+# ----------------------------------------
+ai-responses/
+model-cache/
+vector-embeddings/
+
+# ----------------------------------------
+# Documentation Generation
+# ----------------------------------------
+docs/generated/
+storybook-static/
+.out/
+.storybook-out/
+
+# ----------------------------------------
+# Package Managers
+# ----------------------------------------
+# Uncomment based on your preference:
+# package-lock.json  # if using yarn exclusively
+# yarn.lock          # if using npm exclusively

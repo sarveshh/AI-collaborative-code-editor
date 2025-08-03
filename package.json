@@ -1,39 +1,29 @@
 {
-  "name": "editor-app",
-  "version": "0.1.0",
-  "private": true,
+  "name": "collaborative-editor",
+  "version": "1.0.0",
+  "description": "A full-stack real-time collaborative code editor with AI/LLM integration using the MERN stack",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "concurrently --kill-others-on-fail --prefix-colors \"bgBlue.bold,bgMagenta.bold\" --prefix \"[{name}]\" --names \"SERVER,CLIENT\" \"npm run server\" \"npm run client\"",
+    "server": "cd realtime-server && npm run dev",
+    "client": "cd editor-app && npm run dev",
+    "start": "concurrently --kill-others-on-fail --prefix-colors \"bgBlue.bold,bgMagenta.bold\" --prefix \"[{name}]\" --names \"SERVER,CLIENT\" \"npm run server:prod\" \"npm run client:build\"",
+    "server:prod": "cd realtime-server && npm start",
+    "client:build": "cd editor-app && npm run build && npm start",
+    "install:all": "npm install && npm install --prefix editor-app && npm install --prefix realtime-server",
+    "clean": "rimraf node_modules editor-app/node_modules realtime-server/node_modules",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {
-    "@tiptap/extension-character-count": "^3.0.9",
-    "@tiptap/extension-code-block-lowlight": "^3.0.9",
-    "@tiptap/extension-color": "^3.0.9",
-    "@tiptap/extension-text-style": "^3.0.9",
-    "@tiptap/extension-typography": "^3.0.9",
-    "@tiptap/react": "^3.0.9",
-    "@tiptap/starter-kit": "^3.0.9",
-    "collaborative-editor": "file:..",
-    "highlight.js": "^11.11.1",
-    "lowlight": "^3.3.0",
-    "mongoose": "^8.17.0",
-    "next": "15.4.5",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "socket.io-client": "^4.8.1"
-  },
+  "keywords": [
+    "collaborative",
+    "editor",
+    "realtime",
+    "socket.io",
+    "nextjs",
+    "mern"
+  ],
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.4.5",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "concurrently": "^9.2.0"
   }
 }
