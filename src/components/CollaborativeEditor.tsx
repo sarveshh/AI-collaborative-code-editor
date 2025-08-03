@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
+import RichTextEditor from "./RichTextEditor";
 
 interface CollaborativeEditorProps {
   documentId: string;
@@ -84,41 +85,36 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
     };
   }, [documentId]);
 
-  // Handle content changes
-  const handleContentChange = useCallback(
+  // Handle text selection for AI features
+  const handleTextSelection = useCallback(() => {
+    // This will be handled by the rich text editor
+    // For now, we'll use the selectedText state when needed
+    const selection = window.getSelection();
+    if (selection && selection.toString().trim()) {
+      setSelectedText(selection.toString());
+    } else {
+      setSelectedText("");
+    }
+  }, []);
+
+  // Handle content change from rich text editor
+  const handleEditorChange = useCallback(
     (newContent: string) => {
       setContent(newContent);
-
-      if (socket && isConnected) {
+      
+      if (socket && socket.connected) {
         socket.emit("send-changes", {
           content: newContent,
           documentId: documentId,
         });
       }
     },
-    [socket, isConnected, documentId]
-  );
-
-  // Handle text selection for AI features
-  const handleTextSelection = useCallback(
-    (event: React.SyntheticEvent<HTMLTextAreaElement>) => {
-      const textarea = event.target as HTMLTextAreaElement;
-      const start = textarea.selectionStart;
-      const end = textarea.selectionEnd;
-
-      if (start !== end) {
-        const selected = textarea.value.substring(start, end);
-        setSelectedText(selected);
-      } else {
-        setSelectedText("");
-      }
-    },
-    []
+    [socket, documentId]
   );
 
   // AI Assistant Functions
   const handleExplainCode = useCallback(async () => {
-    const codeToExplain = selectedText || content;
+    const codeToExplain = selectedText || stripHtmlTags(content);
 
     if (!codeToExplain.trim()) {
       alert(
@@ -151,7 +147,7 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
   }, [selectedText, content]);
 
   const handleFixCode = useCallback(async () => {
-    const codeToFix = selectedText || content;
+    const codeToFix = selectedText || stripHtmlTags(content);
 
     if (!codeToFix.trim()) {
       alert(
@@ -186,6 +182,12 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
   const clearAIResponse = useCallback(() => {
     setAiResponse(null);
   }, []);
+
+  // Helper function to strip HTML tags for AI processing
+  const stripHtmlTags = (html: string): string => {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || "";
+  };
 
   const connectionStatusClass = isConnected ? "text-green-600" : "text-red-600";
   const connectionDotClass = isConnected ? "bg-green-500" : "bg-red-500";
@@ -257,15 +259,13 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
             </div>
           </div>
 
-          {/* Code Editor */}
+          {/* Rich Text Editor */}
           <div className="flex-1 p-4">
-            <textarea
-              value={content}
-              onChange={(e) => handleContentChange(e.target.value)}
-              onSelect={handleTextSelection}
-              placeholder="Start typing your code here..."
-              className="w-full h-full p-4 border border-gray-300 rounded-lg font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              style={{ fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace' }}
+            <RichTextEditor
+              content={content}
+              onChange={handleEditorChange}
+              placeholder="Start typing your content here... Use the toolbar to format text, add code blocks, and more!"
+              className="w-full h-full"
             />
           </div>
         </div>
