@@ -101,7 +101,7 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
   const handleEditorChange = useCallback(
     (newContent: string) => {
       setContent(newContent);
-      
+
       if (socket && socket.connected) {
         socket.emit("send-changes", {
           content: newContent,
@@ -185,7 +185,7 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
 
   // Helper function to strip HTML tags for AI processing
   const stripHtmlTags = (html: string): string => {
-    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const doc = new DOMParser().parseFromString(html, "text/html");
     return doc.body.textContent || "";
   };
 

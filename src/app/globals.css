@@ -85,7 +85,8 @@ body {
   background-color: #f3f4f6;
   border-radius: 0.25rem;
   padding: 0.125rem 0.25rem;
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
   font-size: 0.875em;
   color: #dc2626;
 }
@@ -97,7 +98,8 @@ body {
   margin: 1rem 0;
   overflow-x: auto;
   color: #f9fafb;
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
 }
 
 .ProseMirror pre code {
