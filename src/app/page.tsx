@@ -1,12 +1,5 @@
-import CollaborativeEditor from "@/components/CollaborativeEditor";
+import DocumentDashboard from "@/components/DocumentDashboard";
 
 export default function Home() {
-  // Generate a dummy document ID for demonstration
-  const dummyDocumentId = "demo-document-123";
-
-  return (
-    <div className="h-screen">
-      <CollaborativeEditor documentId={dummyDocumentId} />
-    </div>
-  );
+  return <DocumentDashboard />;
 }

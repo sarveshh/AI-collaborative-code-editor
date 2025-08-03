@@ -21,6 +21,29 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
   const [aiResponse, setAiResponse] = useState<AIResponse | null>(null);
   const [isLoadingAI, setIsLoadingAI] = useState<boolean>(false);
   const [selectedText, setSelectedText] = useState<string>("");
+  const [isLoadingDocument, setIsLoadingDocument] = useState<boolean>(true);
+
+  // Load initial document content
+  useEffect(() => {
+    const loadDocument = async () => {
+      try {
+        const response = await fetch(`/api/documents/${documentId}`);
+        const data = await response.json();
+
+        if (data.success && data.data.content) {
+          setContent(data.data.content);
+        }
+      } catch (error) {
+        console.error("Error loading document:", error);
+      } finally {
+        setIsLoadingDocument(false);
+      }
+    };
+
+    if (documentId) {
+      loadDocument();
+    }
+  }, [documentId]);
 
   // Initialize Socket.io connection
   useEffect(() => {
@@ -166,6 +189,18 @@ const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({
 
   const connectionStatusClass = isConnected ? "text-green-600" : "text-red-600";
   const connectionDotClass = isConnected ? "bg-green-500" : "bg-red-500";
+
+  // Show loading state while document is being loaded
+  if (isLoadingDocument) {
+    return (
+      <div className="flex flex-col h-screen bg-gray-100 items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading document...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-screen bg-gray-100">
