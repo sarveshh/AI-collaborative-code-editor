@@ -14,8 +14,10 @@ interface Document {
 const DocumentDashboard: React.FC = () => {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [newDocTitle, setNewDocTitle] = useState("");
+  const [joinDocumentId, setJoinDocumentId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
+  const [isJoining, setIsJoining] = useState(false);
   const router = useRouter();
 
   // Fetch existing documents
@@ -72,6 +74,34 @@ const DocumentDashboard: React.FC = () => {
 
   const joinDocument = (documentId: string) => {
     router.push(`/editor/${documentId}`);
+  };
+
+  const joinDocumentById = async () => {
+    if (!joinDocumentId.trim()) return;
+
+    setIsJoining(true);
+    try {
+      // First, check if the document exists
+      const response = await fetch(`/api/documents/${joinDocumentId.trim()}`);
+      const data = await response.json();
+
+      if (data.success) {
+        // Document exists, navigate to it
+        router.push(`/editor/${joinDocumentId.trim()}`);
+      } else {
+        alert(
+          "Document not found. Please check the document ID and try again."
+        );
+      }
+    } catch (error) {
+      console.error("Error joining document:", error);
+      alert(
+        "Error joining document. Please check the document ID and try again."
+      );
+    } finally {
+      setIsJoining(false);
+      setJoinDocumentId("");
+    }
   };
 
   const copyShareLink = (documentId: string) => {
@@ -139,6 +169,37 @@ const DocumentDashboard: React.FC = () => {
             >
               {isCreating ? "Creating..." : "Create & Edit"}
             </button>
+          </div>
+        </div>
+
+        {/* Join Document by ID */}
+        <div className="bg-white rounded-lg shadow-sm border p-6 mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            Join Session by Document ID
+          </h2>
+          <p className="text-sm text-gray-600 mb-4">
+            Have a document ID? Paste it here to join the collaboration session
+          </p>
+          <div className="flex gap-3">
+            <input
+              type="text"
+              value={joinDocumentId}
+              onChange={(e) => setJoinDocumentId(e.target.value)}
+              placeholder="Paste document ID here (e.g., 60f7b3b3b3b3b3b3b3b3b3b3)"
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono text-sm"
+              onKeyPress={(e) => e.key === "Enter" && joinDocumentById()}
+            />
+            <button
+              onClick={joinDocumentById}
+              disabled={!joinDocumentId.trim() || isJoining}
+              className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              {isJoining ? "Joining..." : "Join Session"}
+            </button>
+          </div>
+          <div className="mt-3 text-xs text-gray-500">
+            💡 Tip: Document IDs are typically 24-character MongoDB ObjectIds.
+            You can get them from share links or other collaborators.
           </div>
         </div>
 
